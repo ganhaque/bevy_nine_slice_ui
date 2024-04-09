@@ -26,6 +26,7 @@ var<uniform> blend: vec4<f32>;
 fn fragment(in: UiVertexOutput) -> @location(0) vec4<f32> {
 	let patch_uv = nine_patch_uv(in.uv);
 	var out = get_tile(patch_uv, bounds.xy, bounds.zw);
+        let original_alpha = out.a;
 
 	out = mix(out, blend_color, blend.x);
 
@@ -33,6 +34,7 @@ fn fragment(in: UiVertexOutput) -> @location(0) vec4<f32> {
 	let lookup_color = textureSample(lookup_gradiant, lookup_gradiant_sampler, vec2<f32>(lookup_uv, 0.5));
 
 	out = mix(out, lookup_color, blend.y);
+        out.a = original_alpha;
 
 	return out;
 }
